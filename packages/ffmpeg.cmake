@@ -15,7 +15,7 @@ ExternalProject_Add(ffmpeg
         libpng
         libsoxr
         libbs2b
-        libvpx
+        #libvpx
         libwebp
         libzimg
         libmysofa
@@ -24,7 +24,7 @@ ExternalProject_Add(ffmpeg
         opus
         speex
         vorbis
-        x264
+        #x264
         x265-10bit
         xvidcore
         libxml2
@@ -41,7 +41,7 @@ ExternalProject_Add(ffmpeg
         dav1d
         vapoursynth
         uavs3d
-        davs2
+        #davs2
         rubberband
         fdk-aac
         opencl
@@ -85,15 +85,15 @@ ExternalProject_Add(ffmpeg
         --enable-libvorbis
         --enable-libbs2b
         --enable-librubberband
-        --enable-libvpx
+        #--enable-libvpx
         --enable-libwebp
-        --enable-libx264
+        #--enable-libx264
         --enable-libx265
         --enable-libaom
         ${enable_rav1e}
         ${enable_svtav1}
         --enable-libdav1d
-        --enable-libdavs2
+        #--enable-libdavs2
         --enable-libuavs3d
         --enable-libxvid
         --enable-libzimg
