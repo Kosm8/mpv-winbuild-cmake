@@ -28,6 +28,10 @@ ExternalProject_Add(x265-10bit
     UPDATE_COMMAND ""
     CONFIGURE_COMMAND ${EXEC} cmake -H${source_dir}/source -B<BINARY_DIR>
         -G Ninja
+        -DMAIN12=ON
+        -DENABLE_HDR10_PLUS=ON
+        -DENABLE_LIBVMAF=ON
+        -DHIGH_BIT_DEPTH=ON
         -DCMAKE_BUILD_TYPE=Release
         -DCMAKE_INSTALL_PREFIX=${MINGW_INSTALL_PREFIX}
         -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE}
