@@ -8,6 +8,8 @@ ExternalProject_Add(mingw-w64-crt
     UPDATE_COMMAND ""
     SOURCE_DIR ${MINGW_SRC}
     CONFIGURE_COMMAND ${EXEC} <SOURCE_DIR>/mingw-w64-crt/configure
+        "CFLAGS='${NOLTO}'"
+        "CXXFLAGS='${NOLTO}'"
         --host=${TARGET_ARCH}
         --prefix=${MINGW_INSTALL_PREFIX}
         --with-sysroot=${CMAKE_INSTALL_PREFIX}

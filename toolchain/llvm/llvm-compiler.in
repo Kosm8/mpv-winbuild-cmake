@@ -3,8 +3,12 @@ PROG=@CMAKE_INSTALL_PREFIX@/bin/@clang_compiler@
 TARGET=@TARGET_ARCH@
 FLAGS="$FLAGS -target $TARGET -march=@GCC_ARCH@ -mtune=@M_TUNE@"
 FLAGS="$FLAGS @driver_mode@ --sysroot @MINGW_INSTALL_PREFIX@"
-FLAGS="$FLAGS -fuse-ld=@TARGET_ARCH@-lld"
+FLAGS="$FLAGS -fuse-ld=lld"
 FLAGS="$FLAGS @cfi@ @opt@"
-FLAGS="$FLAGS -gcodeview"
+FLAGS="$FLAGS -gcodeview -Wno-error=unused-command-line-argument -Wl,--pdb="
 
-"$PROG" $FLAGS "$@" @CLANG_FLAGS@ @linker@
+if [ "$LTO" != "0" ] && [ "@CLANG_PACKAGES_LTO@" = "ON" ]; then
+    LTO_FLAGS="-flto=thin"
+fi
+
+"$PROG" $LTO_FLAGS "$@" $FLAGS @CLANG_FLAGS@ @linker@

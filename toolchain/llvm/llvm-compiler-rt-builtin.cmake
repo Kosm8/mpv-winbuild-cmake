@@ -12,6 +12,8 @@ ExternalProject_Add(llvm-compiler-rt-builtin
         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/lib/clang/${clang_version}
         -DCMAKE_C_COMPILER=${TARGET_ARCH}-clang
         -DCMAKE_CXX_COMPILER=${TARGET_ARCH}-clang++
+        -DCMAKE_C_FLAGS='${CMAKE_C_FLAGS} -flto=thin'
+        -DCMAKE_CXX_FLAGS='${CMAKE_CXX_FLAGS} -flto=thin'
         -DCMAKE_SYSTEM_NAME=Windows
         -DCMAKE_AR=${CMAKE_INSTALL_PREFIX}/bin/llvm-ar
         -DCMAKE_RANLIB=${CMAKE_INSTALL_PREFIX}/bin/llvm-ranlib
@@ -21,6 +23,7 @@ ExternalProject_Add(llvm-compiler-rt-builtin
         -DCOMPILER_RT_DEFAULT_TARGET_ONLY=TRUE
         -DCOMPILER_RT_USE_BUILTINS_LIBRARY=TRUE
         -DCOMPILER_RT_BUILD_BUILTINS=TRUE
+        -DCOMPILER_RT_ENABLE_CET=ON
         -DLLVM_CONFIG_PATH=""
         -DCMAKE_FIND_ROOT_PATH=${MINGW_INSTALL_PREFIX}
         -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY

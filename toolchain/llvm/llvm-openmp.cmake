@@ -12,6 +12,8 @@ ExternalProject_Add(llvm-openmp
         -DCMAKE_INSTALL_PREFIX=${MINGW_INSTALL_PREFIX}
         -DCMAKE_C_COMPILER=${TARGET_ARCH}-clang
         -DCMAKE_CXX_COMPILER=${TARGET_ARCH}-clang++
+        -DCMAKE_C_FLAGS='${CMAKE_C_FLAGS} -flto=thin'
+        -DCMAKE_CXX_FLAGS='${CMAKE_CXX_FLAGS} -flto=thin'
         -DCMAKE_RC_COMPILER=${TARGET_ARCH}-windres
         -DCMAKE_ASM_MASM_COMPILER=llvm-ml
         -DCMAKE_SYSTEM_NAME=Windows

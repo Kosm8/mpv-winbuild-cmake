@@ -6,6 +6,8 @@ ExternalProject_Add(mingw-w64-headers
     UPDATE_COMMAND ""
     SOURCE_DIR ${MINGW_SRC}
     CONFIGURE_COMMAND <SOURCE_DIR>/mingw-w64-headers/configure
+        "CFLAGS='${NOLTO}'"
+        "CXXFLAGS='${NOLTO}'"
         --host=${TARGET_ARCH}
         --prefix=${MINGW_INSTALL_PREFIX}
         --enable-sdk=all
