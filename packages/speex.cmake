@@ -1,6 +1,6 @@
 ExternalProject_Add(speex
     DEPENDS
-        ogg 
+        ogg
     GIT_REPOSITORY https://github.com/xiph/speex.git
     SOURCE_DIR ${SOURCE_LOCATION}
     GIT_CLONE_FLAGS "--filter=tree:0"

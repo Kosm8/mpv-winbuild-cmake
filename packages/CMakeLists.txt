@@ -1,10 +1,10 @@
 set_property(DIRECTORY PROPERTY EP_STEP_TARGETS download)
 include(${PROJECT_SOURCE_DIR}/cmake/packages_check.cmake)
 list(APPEND ep
-    gmp
     xz
     lzo
     uchardet
+    libsamplerate
     rubberband
     zlib
     zstd
@@ -18,10 +18,9 @@ list(APPEND ep
     speex
     libmodplug
     libvpx
-    xvidcore
     game-music-emu
     libpng
-    x264
+    vmaf
     x265
     libdvdcss
     libdvdread
@@ -30,8 +29,6 @@ list(APPEND ep
     luajit
     fribidi
     expat
-    nettle
-    mbedtls
     libxml2
     brotli
     freetype2
@@ -54,15 +51,12 @@ list(APPEND ep
     dav1d
     libwebp
     vapoursynth
-    libbs2b
     openssl
     libssh
     libsrt
     libarchive
     highway
     libjxl
-    uavs3d
-    davs2
     angle-headers
     mujs
     spirv-headers
@@ -79,28 +73,32 @@ list(APPEND ep
     fast_float
     libdovi
     rav1e
+    svtav1
     libplacebo
     libva
     libzvbi
     libaribcaption
-    libsixel
+    opencl-header
+    opencl
+    fdk-aac
+    vvdec
+    vvenc
+    directx-header
     ffmpeg
     mpv
     mpv-release
     mpv-packaging
-    curl
-    flac
-    opusfile
-    libopusenc
-    opus-tools
-    termcap
-    readline
-    cryptopp
+    mpv-debug-plugin
+    mpv-menu-plugin
     sqlite
-    libuv
-    libsodium
-    megasdk
     mesa
+    libva-utils
+    c-ares
+    libssh2
+    aria2
+    vkoverhead
+    zenlib
+    libmediainfo
 )
 foreach(package IN LISTS ep)
     if(NOT ${SINGLE_SOURCE_LOCATION} STREQUAL "")
@@ -118,12 +116,13 @@ list(LENGTH ep ep_length)
 message(STATUS "Parsing ${ep_length} packages")
 
 # Exclude packages which dont depend on mpv when update
-list(APPEND removed "flac" "opusfile" "libopusenc" "opus-tools" "termcap" "readline" "cryptopp" "sqlite" "libuv" "libsodium" "megasdk" "libsixel" "curl" "libressl" "mbedtls" "nettle" "gmp" "mesa")
+list(APPEND removed "sqlite" "libssh2" "c-ares" "aria2")
 list(REMOVE_ITEM repo ${removed})
 list(REMOVE_ITEM ep ${removed})
 list(TRANSFORM repo APPEND "-force-update" OUTPUT_VARIABLE update)
 list(TRANSFORM ep APPEND "-download" OUTPUT_VARIABLE download)
 list(TRANSFORM ep APPEND "-fullclean" OUTPUT_VARIABLE fullclean)
+list(TRANSFORM ep APPEND "-removebuild" OUTPUT_VARIABLE removebuild)
 
 add_custom_target(update
     COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target ${update}
@@ -137,6 +136,11 @@ add_custom_target(download
 add_custom_target(package-fullclean
     COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target ${fullclean}
     COMMENT "Remove all stamp files, reset git HEAD"
+)
+
+add_custom_target(package-removebuild
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target ${removebuild}
+    COMMENT "Remove all build directory"
 )
 
 add_custom_target(cargo-clean

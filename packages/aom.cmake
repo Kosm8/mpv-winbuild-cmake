@@ -1,4 +1,6 @@
 ExternalProject_Add(aom
+    DEPENDS
+        vmaf
     GIT_REPOSITORY https://aomedia.googlesource.com/aom
     SOURCE_DIR ${SOURCE_LOCATION}
     GIT_CLONE_FLAGS "--filter=tree:0"
@@ -20,6 +22,9 @@ ExternalProject_Add(aom
         -DENABLE_TESTDATA=OFF
         -DCONFIG_UNIT_TESTS=0
         -DCONFIG_AV1_DECODER=0
+        -DCONFIG_TUNE_VMAF=1
+        -DDEBUG_CMAKE_DISABLE_COMPILER_TESTS=ON
+        ${aom_neon}
     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1

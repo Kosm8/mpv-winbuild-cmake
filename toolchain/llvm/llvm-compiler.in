@@ -1,30 +1,46 @@
 #!/bin/bash
 PROG=@CMAKE_INSTALL_PREFIX@/bin/@clang_compiler@
-TARGET=@TARGET_ARCH@
-FLAGS="$FLAGS -target $TARGET -march=@GCC_ARCH@ -mtune=@M_TUNE@"
+TARGET=@TARGET_CPU@
+FLAGS="$FLAGS -target $TARGET-pc-windows-gnu -march=@GCC_ARCH@ -mtune=@M_TUNE@"
 FLAGS="$FLAGS @driver_mode@ --sysroot @MINGW_INSTALL_PREFIX@"
 FLAGS="$FLAGS -fuse-ld=lld --ld-path=@TARGET_ARCH@-ld"
-FLAGS="$FLAGS @cfi@ @opt@"
-FLAGS="$FLAGS -gcodeview"
-FLAGS="$FLAGS -Wno-unused-command-line-argument"
+FLAGS="$FLAGS @opt@"
+FLAGS="$FLAGS -gcodeview -pipe -fno-emulated-tls -fstrict-flex-arrays=3 -mllvm=-disable-auto-upgrade-debug-info"
+FLAGS="$FLAGS -Wno-unused-command-line-argument -Wno-vla -Wno-packed -Wno-unused-function -Wno-enum-conversion -Wno-macro-redefined -Wno-backend-plugin -Wno-incompatible-function-pointer-types -Wno-implicit-const-int-float-conversion -Wno-implicit-function-declaration"
+FLAGS="$FLAGS -D_WIN32_WINNT=0x0A00 -DWINVER=0x0A00 -DNDEBUG"
 
 if [ "$LTO" != "0" ] && [ "@CLANG_PACKAGES_LTO@" == "ON" ]; then
-    LTO_FLAGS="-flto=thin"
+    LTO_FLAGS="-flto=thin -fno-split-lto-unit"
     if [ "@LLD_LTO_ALL_THREADS@" == "ON" ] && [ "$LTO_JOB" != "1" ]; then
         LTO_FLAGS="$LTO_FLAGS -flto-jobs=@CPU_COUNT@"
+    fi
+    if [ "$WPD" != "0" ]; then
+        LTO_FLAGS="$LTO_FLAGS -fwhole-program-vtables"
     fi
 fi
 
 if [ "$CONF" == "1" ]; then
-    SKIP_OPT="-g0 -O0 -fno-lto -fno-data-sections -fno-function-sections"
+    SKIP_OPT="-g0 -O1 -fno-lto -fno-data-sections -fno-function-sections -fno-whole-program-vtables"
 else
     if [ "@ENABLE_CCACHE@" == "ON" ]; then
         CCACHE="ccache"
     fi
 fi
 
-if [ "$GC" != "0" ]; then
-    CLANG_GC="-fdata-sections -ffunction-sections"
+if [ "$CFI" != "0" ]; then
+    FLAGS="$FLAGS @clang_cfi@"
 fi
 
-$CCACHE "$PROG" $LTO_FLAGS "$@" $FLAGS $CLANG_GC @CLANG_FLAGS@ @linker@ $SKIP_OPT
+if [ "$GC" != "0" ]; then
+    CLANG_GC="-fdata-sections -ffunction-sections -funique-section-names -fno-unwind-tables -fomit-frame-pointer -momit-leaf-frame-pointer -fmerge-all-constants"
+fi
+
+if [ "@CLANG_PACKAGES_PGO_GEN@" == "ON" ] && [ "$PGO" != "0" ]; then
+    PGO_FLAGS="-fprofile-generate="IRPGO_GEN/%p/" -fprofile-update=atomic"
+else
+    if [ "@CLANG_PACKAGES_PGO_USE@" == "ON" ] && [ "$PGO" != "0" ]; then
+        PGO_FLAGS="-fprofile-use=@CLANG_PACKAGES_PGO_USE_PATH@"
+    fi
+fi
+
+$CCACHE "$PROG" $LTO_FLAGS $PGO_FLAGS "$@" $FLAGS $CLANG_GC @CLANG_FLAGS@ @linker@ $SKIP_OPT

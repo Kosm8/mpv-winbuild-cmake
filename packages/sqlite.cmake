@@ -1,6 +1,6 @@
 ExternalProject_Add(sqlite
-    URL https://www.sqlite.org/2020/sqlite-autoconf-3330000.tar.gz
-    URL_HASH SHA3_256=6e94e9453cedf8f2023e3923f856741d1e28a2271e9f93d24d95fa48870edaad
+    URL https://www.sqlite.org/2023/sqlite-autoconf-3440000.tar.gz
+    URL_HASH SHA3_256=6869046465eae886f1a9f2c8debeeba44d34328693aa77a5bd4a3cfed93d6556
     DOWNLOAD_DIR ${SOURCE_LOCATION}
     CONFIGURE_COMMAND ${EXEC} autoreconf -fi && CONF=1 <SOURCE_DIR>/configure
         --host=${TARGET_ARCH}

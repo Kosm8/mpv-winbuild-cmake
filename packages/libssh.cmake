@@ -15,6 +15,7 @@ ExternalProject_Add(libssh
         -DBUILD_SHARED_LIBS=OFF
         -DWITH_ZLIB=ON
         -DWITH_EXAMPLES=OFF
+        -DCMAKE_C_FLAGS='${CMAKE_C_FLAGS} -DHAVE_COMPILER__FUNC__=1'
     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
           COMMAND bash -c "echo {'Libs.private: -lwsock32 -liphlpapi -lpthread','\nRequires.private: libssl','\nCflags.private: -DLIBSSH_STATIC'} >> <BINARY_DIR>/libssh.pc"
     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
