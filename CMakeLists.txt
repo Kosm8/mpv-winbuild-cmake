@@ -23,7 +23,7 @@ string(REGEX MATCH "^[^-]+" HOST_CPU ${HOST_ARCH})
 if(TARGET_CPU STREQUAL "x86_64")
     set(TARGET_CPU_FAMILY "x86_64")
     set(TARGET_BITS 64)
-    set(GCC_ARCH "x86-64" CACHE STRING "Target architecture for x86_64")
+    set(GCC_ARCH "x86-64-v3" CACHE STRING "Target architecture for x86_64")
     string(REGEX MATCH "-v3" x86_64_LEVEL ${GCC_ARCH})
 elseif(TARGET_CPU STREQUAL "i686")
     set(TARGET_CPU_FAMILY "x86")
@@ -34,6 +34,12 @@ elseif(TARGET_CPU STREQUAL "aarch64")
     set(GCC_ARCH "armv8.2-a" CACHE STRING "Target architecture for aarch64")
 endif()
 
+if(GCC_ARCH MATCHES "86" OR GCC_ARCH MATCHES "arm")
+    set(M_TUNE "generic" CACHE STRING "mtune")
+else()
+    set(M_TUNE ${GCC_ARCH} CACHE STRING "mtune")
+endif()
+
 processorcount(CPU_COUNT)
 if(CPU_COUNT EQUAL 0)
     set(CPU_COUNT 1)
@@ -42,7 +48,15 @@ endif()
 set(MAKEJOBS ${CPU_COUNT})
 # set(MAKEJOBS 5) # uncomment this line to manually change no. of cpu
 set(MAKEJOBS ${MAKEJOBS} CACHE STRING "Number of parallel processes to run for each package build")
-
+if(TARGET_CPU STREQUAL "x86_64")
+    execute_process(
+        COMMAND ${EXEC} echo | ${CMAKE_C_COMPILER} -dM -E - -march=${GCC_ARCH}
+        OUTPUT_VARIABLE CC_OUTPUT
+    )
+    if(CC_OUTPUT MATCHES "__AES")
+        option(GCC_ARCH_HAS_AES "Force Enable AES, default is auto." ON)
+    endif()
+endif()
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set (CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/install" CACHE PATH "Default install path" FORCE )
 endif()
@@ -53,8 +67,9 @@ option(ALWAYS_REMOVE_BUILDFILES "Always delete build files after successful comp
 set(LLVM_ENABLE_LTO "OFF" CACHE STRING "OFF, ON, Thin and Full")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/toolchain.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/toolchain.cmake @ONLY)
 set(TOOLCHAIN_FILE ${CMAKE_CURRENT_BINARY_DIR}/toolchain.cmake)
-set(CLANG_FLAGS "" CACHE STRING "These flags will be added to the end of the clang args")
-set(LLD_FLAGS "" CACHE STRING "These flags will be added to the end of the lld args")
+set(CLANG_FLAGS "-O3 -DWIN32_WINNT=0x0A00 -mprefer-vector-width=512 -pipe" CACHE STRING "These flags will be added to the end of the clang args")
+set(LLD_FLAGS "-O3" CACHE STRING "These flags will be added to the end of the lld args")
+set(AV1_ALT_ENC "both" CACHE STRING "rav1e, svtav1, both")
 set(COMPILER_TOOLCHAIN "gcc" CACHE STRING "gcc or clang")
 if(COMPILER_TOOLCHAIN STREQUAL "gcc")
     if(TARGET_ARCH STREQUAL "aarch64-w64-mingw32")
@@ -69,7 +84,15 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cargo_config.in ${RUSTUP_LOCATION}/.c
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/exec.in ${CMAKE_CURRENT_BINARY_DIR}/exec @ONLY)
 set(EXEC ${CMAKE_CURRENT_BINARY_DIR}/exec)
 set(MAKE ${EXEC} make -j${MAKEJOBS})
-
+if(TARGET_CPU STREQUAL "x86_64")
+    execute_process(
+        COMMAND ${EXEC} echo | ${CMAKE_C_COMPILER} -dM -E - -march=${GCC_ARCH}
+        OUTPUT_VARIABLE CC_OUTPUT
+    )
+    if(CC_OUTPUT MATCHES "__AES")
+        option(GCC_ARCH_HAS_AES "Force Enable AES, default is auto." ON)
+    endif()
+endif()
 string(TIMESTAMP BUILDDATE "%Y%m%d" UTC)
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/publish.in)

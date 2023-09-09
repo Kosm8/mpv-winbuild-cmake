@@ -21,6 +21,7 @@ list(APPEND ep
     game-music-emu
     libpng
     x264
+    vmaf
     x265
     libdvdcss
     libdvdread
@@ -42,6 +43,8 @@ list(APPEND ep
     fontconfig
     libunibreak
     libass
+    brotli
+    openssl
     mbedtls
     libxml2
     libvpl
@@ -59,7 +62,6 @@ list(APPEND ep
     libsdl2
     libsrt
     libopenmpt
-    brotli
     highway
     libjxl
     uavs3d
@@ -79,9 +81,16 @@ list(APPEND ep
     rav1e
     libplacebo
     libva
+    libva-utils
     libzvbi
     libaribcaption
     libsixel
+    opencl-header
+    opencl
+    directx-header
+    mesa
+    fdk-aac
+    svtav1
     ffmpeg
     mpv
     mpv-release
@@ -115,7 +124,7 @@ list(LENGTH ep ep_length)
 message(STATUS "Parsing ${ep_length} packages")
 
 # Exclude packages which dont depend on mpv when update
-list(APPEND removed "flac" "opusfile" "libopusenc" "opus-tools" "termcap" "readline" "cryptopp" "sqlite" "libuv" "libsodium" "megasdk" "libsixel" "curl")
+list(APPEND removed "flac" "opusfile" "libopusenc" "opus-tools" "termcap" "readline" "cryptopp" "sqlite" "libuv" "libsodium" "megasdk" "libsixel" "curl" "openssl" "libva-utils" "mesa")
 list(REMOVE_ITEM repo ${removed})
 list(REMOVE_ITEM ep ${removed})
 list(TRANSFORM repo APPEND "-force-update" OUTPUT_VARIABLE update)

@@ -6,7 +6,7 @@ ExternalProject_Add(ffmpeg
         bzip2
         gmp
         lame
-        mbedtls
+        #mbedtls
         libssh
         libsrt
         libass
@@ -25,7 +25,7 @@ ExternalProject_Add(ffmpeg
         speex
         vorbis
         x264
-        ${ffmpeg_x265}
+        x265-10bit
         xvidcore
         libxml2
         libvpl
@@ -36,12 +36,19 @@ ExternalProject_Add(ffmpeg
         libzvbi
         libaribcaption
         aom
-        rav1e
+        ${rav1e}
+        ${svtav1}
         dav1d
         vapoursynth
         uavs3d
         davs2
         rubberband
+        fdk-aac
+        opencl
+        vulkan
+        directx-header
+        vmaf
+        libva
     GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
     SOURCE_DIR ${SOURCE_LOCATION}
     GIT_CLONE_FLAGS "--filter=tree:0"
@@ -53,8 +60,9 @@ ExternalProject_Add(ffmpeg
         --target-os=mingw32
         --pkg-config-flags=--static
         --enable-cross-compile
-        --enable-runtime-cpudetect
+        --disable-runtime-cpudetect
         ${ffmpeg_hardcoded_tables}
+        --disable-debug
         --enable-gpl
         --enable-version3
         --enable-nonfree
@@ -82,13 +90,14 @@ ExternalProject_Add(ffmpeg
         --enable-libx264
         --enable-libx265
         --enable-libaom
-        --enable-librav1e
+        ${enable_rav1e}
+        ${enable_svtav1}
         --enable-libdav1d
         --enable-libdavs2
         --enable-libuavs3d
         --enable-libxvid
         --enable-libzimg
-        --enable-mbedtls
+        --enable-schannel
         --enable-libxml2
         --enable-libmysofa
         --enable-libssh
@@ -105,12 +114,18 @@ ExternalProject_Add(ffmpeg
         --enable-nvenc
         --enable-amf
         --disable-doc
-        --disable-vaapi
+        --enable-vaapi
+        --enable-libfdk-aac
+        --enable-libvmaf
+        --enable-opencl
+        --enable-w32threads
+        --disable-pthreads
+        --enable-ffnvcodec
         --disable-vdpau
         --disable-videotoolbox
-        --disable-decoder=libaom_av1
         --extra-cflags='-Wno-error=int-conversion'
         "--extra-libs='${ffmpeg_extra_libs}'" # -lstdc++ / -lc++ needs by libjxl and shaderc
+        "--nvccflags='--cuda-gpu-arch=sm_86 -O3'"
     BUILD_COMMAND ${MAKE}
     INSTALL_COMMAND ${MAKE} install
     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1

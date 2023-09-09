@@ -7,4 +7,4 @@ FLAGS="$FLAGS -fuse-ld=@TARGET_ARCH@-lld"
 FLAGS="$FLAGS @cfi@ @opt@"
 FLAGS="$FLAGS -gcodeview"
 
-"$PROG" $FLAGS "$@" @CLANG_FLAGS@ @linker@
+"$PROG" "$@" $FLAGS @CLANG_FLAGS@ @linker@
