@@ -1,6 +1,6 @@
 set(clang_version "18")
 ExternalProject_Add(llvm
-    GIT_REPOSITORY https://github.com/llvm/llvm-project.git
+    GIT_REPOSITORY https://github.com/Kosm8/llvm-project.git
     SOURCE_DIR ${SOURCE_LOCATION}
     GIT_CLONE_FLAGS "--sparse --filter=tree:0"
     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !*/test"
@@ -146,8 +146,8 @@ ExternalProject_Add(llvm
         -DLLVM_TOOL_VFABI_DEMANGLE_FUZZER_BUILD=OFF
         -DLLVM_TOOL_XCODE_TOOLCHAIN_BUILD=OFF
         "-DLLVM_THINLTO_CACHE_PATH='${CMAKE_INSTALL_PREFIX}/llvm-thinlto'"
-        "-DCMAKE_C_FLAGS='-g0 -ftls-model=local-exec ${llvm_lto} ${llvm_pgo}'"
-        "-DCMAKE_CXX_FLAGS='-g0 -ftls-model=local-exec ${llvm_lto} ${llvm_pgo}'"
+        "-DCMAKE_C_FLAGS='-pipe -g0 -ftls-model=local-exec ${llvm_lto} ${llvm_pgo}'"
+        "-DCMAKE_CXX_FLAGS='-pipe -g0 -ftls-model=local-exec ${llvm_lto} ${llvm_pgo}'"
         "-DCMAKE_EXE_LINKER_FLAGS='-fuse-ld=lld -Xlinker -s -Xlinker --icf=all -Xlinker --thinlto-cache-policy=cache_size_bytes=1g:prune_interval=1m'"
         -DLLVM_TOOLCHAIN_TOOLS='llvm-driver,llvm-ar,llvm-ranlib,llvm-objdump,llvm-rc,llvm-cvtres,llvm-nm,llvm-strings,llvm-readobj,llvm-dlltool,llvm-pdbutil,llvm-objcopy,llvm-strip,llvm-cov,llvm-profdata,llvm-addr2line,llvm-symbolizer,llvm-windres,llvm-ml,llvm-readelf,llvm-size,llvm-config'
     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>

@@ -7,14 +7,14 @@ FLAGS="$FLAGS -fuse-ld=lld --ld-path=@TARGET_ARCH@-ld"
 FLAGS="$FLAGS -Wno-unused-command-line-argument"
 
 if [ "$CONF" == "1" ]; then
-    SKIP_OPT="-g0 -O0 -fno-lto -fno-data-sections -fno-function-sections"
+    SKIP_OPT="-g0 -O0 -fno-data-sections -fno-fast-math -fno-function-sections -fno-lto"
 else
-    FLAGS="$FLAGS -gcodeview @cfi@ @opt@"
+    FLAGS="$FLAGS -gcodeview -pipe @clang_cfi@ @opt@"
     if [ "@ENABLE_CCACHE@" == "ON" ]; then
         CCACHE="ccache"
     fi
     if [ "$GC" != "0" ]; then
-        CLANG_GC="-fdata-sections -ffunction-sections"
+        CLANG_GC="-fdata-sections -ffast-math  -ffunction-sections -fmerge-all-constants -fomit-frame-pointer -funique-section-names -momit-leaf-frame-pointer"
     fi
     if [ "$LTO" != "0" ] && [ "@CLANG_PACKAGES_LTO@" == "ON" ]; then
         LTO_FLAGS="-flto=thin"
