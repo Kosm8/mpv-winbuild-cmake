@@ -48,12 +48,8 @@ foreach(compiler clang++ g++ c++ clang gcc as)
                    @ONLY)
 endforeach()
 
-if(TARGET_CPU STREQUAL "i686")
-    set(ld_m_flag "i386pe")
-elseif(TARGET_CPU STREQUAL "x86_64")
+if(TARGET_CPU STREQUAL "x86_64")
     set(ld_m_flag "i386pep")
-elseif(TARGET_CPU STREQUAL "aarch64")
-    set(ld_m_flag "arm64pe")
 endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/llvm/llvm-ld.in
                ${CMAKE_INSTALL_PREFIX}/bin/${TARGET_ARCH}-ld
