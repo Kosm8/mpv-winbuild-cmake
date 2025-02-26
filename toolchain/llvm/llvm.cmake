@@ -1,6 +1,6 @@
 set(clang_version "21")
 ExternalProject_Add(llvm
-    GIT_REPOSITORY https://github.com/llvm/llvm-project.git
+    GIT_REPOSITORY https://github.com/Kosm8/llvm-project.git
     SOURCE_DIR ${SOURCE_LOCATION}
     GIT_CLONE_FLAGS "--sparse --filter=tree:0"
     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !*/test !/lldb !/mlir !/clang-tools-extra !/mlir !/polly !/bolt !/flang"

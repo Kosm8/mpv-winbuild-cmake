@@ -6,24 +6,18 @@ ExternalProject_Add(mpv
         lcms2
         libarchive
         libass
-        libdvdnav
-        libdvdread
         libiconv
         libjpeg
+        libplacebo
         libpng
         luajit
-        rubberband
-        uchardet
-        openal-soft
         mujs
-        vulkan
         shaderc
-        libplacebo
         spirv-cross
-        vapoursynth
-        libsdl2
         subrandr
-    GIT_REPOSITORY https://github.com/mpv-player/mpv.git
+        uchardet
+        vulkan
+    GIT_REPOSITORY https://github.com/Kosm8/mpv.git
     SOURCE_DIR ${SOURCE_LOCATION}
     GIT_CLONE_FLAGS "--filter=tree:0"
     UPDATE_COMMAND ""
@@ -39,22 +33,16 @@ ExternalProject_Add(mpv
         -Db_lto=true
         ${mpv_lto_mode}
         -Dlibmpv=true
-        -Dpdf-build=enabled
-        -Dlua=enabled
-        -Djavascript=enabled
-        -Dsdl2-gamepad=enabled
-        -Dlibarchive=enabled
-        -Dlibbluray=enabled
-        -Ddvdnav=enabled
-        -Duchardet=enabled
-        -Drubberband=enabled
-        -Dlcms2=enabled
-        -Dopenal=enabled
-        -Dspirv-cross=enabled
-        -Dvulkan=enabled
-        -Dvapoursynth=enabled
-        -Dsubrandr=enabled
         ${mpv_gl}
+        -Djavascript=enabled
+        -Dlcms2=enabled
+        -Dlibarchive=enabled
+        -Dlua=enabled
+        -Dpdf-build=enabled
+        -Dspirv-cross=enabled
+        -Dsubrandr=enabled
+        -Duchardet=enabled
+        -Dvulkan=enabled
         -Dc_args='-Wno-error=int-conversion'
     BUILD_COMMAND ${EXEC} LTO_JOB=1 PDB=1 ninja -C <BINARY_DIR>
     INSTALL_COMMAND ""
@@ -72,7 +60,7 @@ ExternalProject_Add_Step(mpv copy-binary
     COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/mpv.exe                           ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv.exe
     COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/mpv.com                           ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv.com
     COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/mpv.pdf                           ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/doc/manual.pdf
-    COMMAND ${CMAKE_COMMAND} -E copy ${MINGW_INSTALL_PREFIX}/etc/fonts/fonts.conf   ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv/fonts.conf
+    #COMMAND ${CMAKE_COMMAND} -E copy ${MINGW_INSTALL_PREFIX}/etc/fonts/fonts.conf   ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv/fonts.conf
     ${mpv_copy_debug}
     COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libmpv-2.dll          ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/libmpv-2.dll
     COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libmpv.dll.a          ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/libmpv.dll.a
