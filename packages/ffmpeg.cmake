@@ -1,49 +1,15 @@
 ExternalProject_Add(ffmpeg
     DEPENDS
-        amf-headers
-        avisynth-headers
-        nvcodec-headers
         bzip2
-        lame
-        lcms2
-        openssl
-        libssh
-        libsrt
-        libass
-        libbluray
-        libdvdnav
-        libdvdread
-        libmodplug
-        libpng
-        libsoxr
-        libbs2b
-        libvpx
-        libwebp
-        libzimg
-        libmysofa
+        dav1d
         fontconfig
         harfbuzz
-        opus
-        speex
-        vorbis
-        x264
-        ${ffmpeg_x265}
-        libxml2
-        libvpl
-        libopenmpt
-        libjxl
+        #lcms2
+        libass
         libplacebo
-        libzvbi
-        libaribcaption
-        aom
-        svtav1
-        dav1d
-        vapoursynth
-        ${ffmpeg_uavs3d}
-        ${ffmpeg_davs2}
-        rubberband
-        libva
-        openal-soft
+        libpng
+        libxml2
+        libzimg
     GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
     SOURCE_DIR ${SOURCE_LOCATION}
     GIT_CLONE_FLAGS "--sparse --filter=tree:0"
@@ -57,64 +23,37 @@ ExternalProject_Add(ffmpeg
         --pkg-config-flags=--static
         --enable-cross-compile
         --enable-runtime-cpudetect
+        --disable-autodetect
         --enable-gpl
         --enable-version3
-        --enable-avisynth
-        --enable-vapoursynth
+        --disable-doc
+        --disable-programs
+        --disable-debug
+        --disable-avdevice
+        --disable-muxers
+        --disable-demuxer=matroska
+        --disable-decoder=aac_fixed,ac3_fixed,mp1,mp2,mp3,mp3adu,mp3on4
+        --disable-devices
+        --disable-bsfs
+        --disable-filters
+        --disable-encoders
+        --enable-d3d11va
+        --enable-dxva2
+        --enable-filter=bwdif,dynaudnorm,loudnorm,rotate,vflip
+        #--enable-lcms2
         --enable-libass
-        --enable-libbluray
-        --enable-libdvdnav
-        --enable-libdvdread
+        --enable-libdav1d
+        --enable-libfontconfig
         --enable-libfreetype
         --enable-libfribidi
-        --enable-libfontconfig
         --enable-libharfbuzz
-        --enable-libmodplug
-        --enable-libopenmpt
-        --enable-libmp3lame
-        --enable-lcms2
-        --enable-libopus
-        --enable-libsoxr
-        --enable-libspeex
-        --enable-libvorbis
-        --enable-libbs2b
-        --enable-librubberband
-        --enable-libvpx
-        --enable-libwebp
-        --enable-libx264
-        --enable-libx265
-        --enable-libaom
-        --enable-libsvtav1
-        --enable-libdav1d
-        ${ffmpeg_davs2_cmd}
-        ${ffmpeg_uavs3d_cmd}
-        --enable-libzimg
-        --enable-openssl
-        --enable-libxml2
-        --enable-libmysofa
-        --enable-libssh
-        --enable-libsrt
-        --enable-libvpl
-        --enable-libjxl
         --enable-libplacebo
-        --enable-libzvbi
-        --enable-libaribcaption
-        --enable-cuda-llvm
-        --enable-cuvid
-        --enable-nvdec
-        --enable-nvenc
-        --enable-amf
-        --enable-openal
-        --disable-doc
-        --disable-ffplay
-        --disable-ffprobe
-        --enable-vaapi
-        --disable-vdpau
-        --disable-videotoolbox
-        --disable-decoder=libaom_av1
+        --enable-libxml2
+        --enable-libzimg
+        --enable-schannel
         ${ffmpeg_lto}
         --extra-cflags='-Wno-error=int-conversion'
-        "--extra-libs='${ffmpeg_extra_libs}'" # -lstdc++ / -lc++ needs by libjxl and shaderc
+        --extra-libs='${ffmpeg_extra_libs}' # -lstdc++ / -lc++ needs by libjxl and shaderc
     BUILD_COMMAND ${MAKE}
     INSTALL_COMMAND ${MAKE} install
     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1

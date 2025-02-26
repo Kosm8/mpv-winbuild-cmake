@@ -4,8 +4,8 @@ ExternalProject_Add(libarchive
         lzo
         xz
         zlib
-        zstd
-        openssl
+        #zstd
+        #openssl
         libxml2
     GIT_REPOSITORY https://github.com/libarchive/libarchive.git
     SOURCE_DIR ${SOURCE_LOCATION}
@@ -20,8 +20,8 @@ ExternalProject_Add(libarchive
         -DCMAKE_INSTALL_LIBDIR=lib
         -DBUILD_SHARED_LIBS=OFF
         -DENABLE_ZLIB=ON
-        -DENABLE_ZSTD=ON
-        -DENABLE_OPENSSL=ON
+        #-DENABLE_ZSTD=ON
+        #-DENABLE_OPENSSL=ON
         -DENABLE_BZip2=ON
         -DENABLE_ICONV=ON
         -DENABLE_LIBXML2=ON

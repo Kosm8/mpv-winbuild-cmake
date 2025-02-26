@@ -1,6 +1,6 @@
 ExternalProject_Add(gcc-binutils
-    URL https://ftp.gnu.org/gnu/binutils/binutils-2.45.1.tar.xz
-    URL_HASH SHA512=ea030419eba387579ab717be7e3223fc99e93b586860b06003c12489f93441640d4082736f76aa5e98233db4f46e232f536a45e471486de1f5b64e1b827c167e
+    URL https://mirrors.ircam.fr/pub/gnu/gnu/binutils/binutils-2.47.tar.xz
+    URL_HASH SHA512=3126a1064374d8da40d4d70630c204ed1e75d542c447d53fca9778c7ceff095c28e9b445e15a313fef9729082d7966471ee6b5b715d479aa6d568528743e1d98
     DOWNLOAD_DIR ${SOURCE_LOCATION}
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
         --target=${TARGET_ARCH}

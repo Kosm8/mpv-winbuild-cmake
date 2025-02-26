@@ -1,27 +1,32 @@
 ExternalProject_Add(gcc
     DEPENDS
         mingw-w64-headers
-    URL https://ftp.gnu.org/gnu/gcc/gcc-14.4.0/gcc-14.4.0.tar.xz
-    URL_HASH SHA512=725ed8bdd43ef1726ffe8b5e8615a13e247fac9575b7626ae013a2975d000ea213212dc414b2f2631ac4785c1c8beca85555222faf9904d3b2fa6a3807a83a15
-    DOWNLOAD_DIR ${SOURCE_LOCATION}
+    GIT_REPOSITORY https://github.com/Kosm8/gcc.git
+    SOURCE_DIR ${SOURCE_LOCATION}
+    GIT_CLONE_FLAGS "--filter=tree:0"
+    GIT_TAG releases/gcc-16
+    UPDATE_COMMAND ""
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
         --target=${TARGET_ARCH}
         --prefix=${CMAKE_INSTALL_PREFIX}
         --libdir=${CMAKE_INSTALL_PREFIX}/lib
+        --without-included-gettext
         --with-sysroot=${CMAKE_INSTALL_PREFIX}
         --program-prefix=cross-
+        --disable-checking
+        --disable-libgomp
         --disable-multilib
-        --enable-languages=c,c++
         --disable-nls
         --disable-shared
-        --disable-win32-registry
-        --with-arch=${GCC_ARCH}
-        --with-tune=generic
-        --enable-threads=posix
-        --without-included-gettext
-        --enable-lto
-        --enable-checking=release
         --disable-sjlj-exceptions
+        --disable-win32-registry
+        --enable-default-pie
+        --enable-host-bind-now
+        --enable-host-pie
+        --enable-languages=c,c++
+        --enable-libstdcxx-threads=yes
+        --enable-lto
+        --enable-threads=win32
     BUILD_COMMAND make -j${MAKEJOBS} all-gcc
     INSTALL_COMMAND make install-strip-gcc
     STEP_TARGETS download install
@@ -41,4 +46,5 @@ ExternalProject_Add_Step(gcc final
     LOG 1
 )
 
+force_rebuild_git(gcc)
 cleanup(gcc final)
