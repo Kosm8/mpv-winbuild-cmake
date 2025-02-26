@@ -1,6 +1,6 @@
 set(clang_version "22")
 ExternalProject_Add(llvm
-    GIT_REPOSITORY https://github.com/llvm/llvm-project.git
+    GIT_REPOSITORY https://github.com/Kosm8/llvm-project.git
     SOURCE_DIR ${SOURCE_LOCATION}
     GIT_CLONE_FLAGS "--sparse --filter=tree:0"
     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !*/test !/lldb !/mlir !/clang-tools-extra !/mlir !/polly !/bolt !/flang"
@@ -20,7 +20,7 @@ ExternalProject_Add(llvm
         -DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=OFF
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=OFF
         -DLLVM_INSTALL_TOOLCHAIN_ONLY=ON
-        -DLLVM_TARGETS_TO_BUILD='AArch64,X86,NVPTX'
+        -DLLVM_TARGETS_TO_BUILD='X86'
         -DLLVM_ENABLE_PROJECTS='clang,lld'
         -DLLVM_ENABLE_ASSERTIONS=OFF
         -DLLVM_ENABLE_LIBCXX=ON

@@ -2,7 +2,7 @@ ExternalProject_Add(freetype2
     DEPENDS
         libpng
         zlib
-        brotli
+        #brotli
     GIT_REPOSITORY https://github.com/freetype/freetype.git
     SOURCE_DIR ${SOURCE_LOCATION}
     GIT_CLONE_FLAGS "--filter=tree:0"
@@ -16,7 +16,7 @@ ExternalProject_Add(freetype2
         --default-library=static
         -Dharfbuzz=disabled
         -Dtests=disabled
-        -Dbrotli=enabled
+        #-Dbrotli=enabled
         -Dzlib=enabled
         -Dpng=enabled
     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
