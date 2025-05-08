@@ -31,7 +31,6 @@ ExternalProject_Add(ffmpeg
         ${ffmpeg_hardcoded_tables}
         --enable-gpl
         --enable-version3
-        --enable-postproc
         --disable-doc
         --disable-ffplay
         --disable-ffprobe
