@@ -15,7 +15,7 @@ ExternalProject_Add(ffmpeg
         libzvbi
         ${nvcodec_headers}
         shaderc
-    GIT_REPOSITORY https://github.com/librempeg/librempeg.git
+    GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
     SOURCE_DIR ${SOURCE_LOCATION}
     GIT_CLONE_FLAGS "--sparse --filter=tree:0"
     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !tests/ref/fate"
