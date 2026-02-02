@@ -4,7 +4,7 @@ ExternalProject_Add(rustup
     SOURCE_DIR rustup-prefix/src
     CONFIGURE_COMMAND ${EXEC} CONF=1
         curl -sSf https://sh.rustup.rs |
-        sh -s -- -y --default-toolchain nightly --target x86_64-pc-windows-gnullvm,x86_64-pc-windows-gnu --no-modify-path --profile minimal
+        sh -s -- -y --default-toolchain nightly-2026-01-28 --target x86_64-pc-windows-gnullvm,x86_64-pc-windows-gnu --no-modify-path --profile minimal
     BUILD_COMMAND ${EXEC} rustup update
     INSTALL_COMMAND ""
     LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
